@@ -1,27 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import ResCard from './ResCard'
 import { reslist } from '../Config'
-
+import Shimmer from './Shimmer'
 
 const Body = () => {
 
   const [txt, setTxt] = useState("");
 
-  const [item, setItem] = useState(reslist);
+  const [item, setItem] = useState([]);
+
+  const [filtereditem, setFilteredItem] = useState([]);
 
   const searchItems = (e) => {
     setTxt(e.target.value);
   }
   const filterItems = (txt) => {
     let f = 0;
+    console.log("clicked");
     item.filter((eve) => {
-      if (eve.data.name.includes(txt)) {
+      if (eve?.data?.name?.toLoweCase()?.includes(txt.toLowerCase())) {
         f = 1;
-        setItem([eve]);
+        setFilteredItem([eve]);
       }
     })
-    if (f == 0)
-      setItem([]);
+    if (f === 0)
+      setFilteredItem([]);
   }
   useEffect(()=>{
     getResCard();
@@ -32,8 +35,12 @@ const Body = () => {
     const json=await data.json(); 
     console.log(json);
     setItem(json?.data?.cards[2]?.data?.data?.cards);
+    setFilteredItem(json?.data?.cards[2]?.data?.data?.cards)
   }
-  return (
+  //early return or optional chaining otherwise smtime code will break length undefined krke
+  if(!item)
+  return null 
+  return (item?.length===0)?<Shimmer />:(
     <>
       <div className='search-container'>
         <input type='text' placeholder='ENTER THE TEXT' value={txt} onChange={searchItems} />
@@ -41,7 +48,7 @@ const Body = () => {
       </div>
       <div>
         {
-          item.map((e) => {
+          filtereditem.map((e) => {
             return <ResCard {...e.data} key={e.data.id} />
           })
         }
