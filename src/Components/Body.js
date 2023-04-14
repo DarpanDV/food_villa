@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import ResCard from './ResCard'
 import { reslist } from '../Config'
 import Shimmer from './Shimmer'
-
+import useOnline from './Utils/useOnline'
 const Body = () => {
 
   const [txt, setTxt] = useState("");
@@ -18,7 +18,7 @@ const Body = () => {
     let f = 0;
     console.log("clicked");
     item.filter((eve) => {
-      if (eve?.data?.name?.toLoweCase()?.includes(txt.toLowerCase())) {
+      if (eve?.data?.name?.toLowerCase()?.includes(txt.toLowerCase())) {
         f = 1;
         setFilteredItem([eve]);
       }
@@ -29,6 +29,7 @@ const Body = () => {
   useEffect(()=>{
     getResCard();
   },[])
+
   async function getResCard()
   {
     const data=await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9351929&lng=77.62448069999999&page_type=DESKTOP_WEB_LISTING");
@@ -37,6 +38,10 @@ const Body = () => {
     setItem(json?.data?.cards[2]?.data?.data?.cards);
     setFilteredItem(json?.data?.cards[2]?.data?.data?.cards)
   }
+   const offline=useOnline();
+   if(!offline)
+   return <h1>OOPS!! CHECK YOUR INTERNET CONNECTION</h1>
+
   //early return or optional chaining otherwise smtime code will break length undefined krke
   if(!item)
   return null 
