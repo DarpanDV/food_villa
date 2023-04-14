@@ -6,6 +6,12 @@ import Error from "./Components/Error";
 import About from "../src/Components/About";
 import Contact from "../src/Components/Contact"
 import ResRoute from "./Components/ResRoute";
+import { lazy,Suspense } from "react";
+import Shimmer from "./Components/Shimmer";
+
+const Instamart=lazy(()=>import("./Components/Instamart"))
+
+
 const App=()=>{
 
   return (
@@ -33,6 +39,12 @@ const appRouter=createBrowserRouter([
       {
         path:"/contact",
         element:<Contact/>
+      },
+      {
+        path:"/instamart",
+        element:<Suspense fallback={<Shimmer/>}>
+          <Instamart/>
+        </Suspense>
       },
       // DYNAMIC <ROUTING>
       {

@@ -3,6 +3,7 @@ import ResCard from './ResCard'
 import { reslist } from '../Config'
 import Shimmer from './Shimmer'
 import useOnline from './Utils/useOnline'
+import { filterItems } from './Utils/helper'
 const Body = () => {
 
   const [txt, setTxt] = useState("");
@@ -14,18 +15,20 @@ const Body = () => {
   const searchItems = (e) => {
     setTxt(e.target.value);
   }
-  const filterItems = (txt) => {
+  
+ const filterItems = (txt) => {
     let f = 0;
-    console.log("clicked");
-    item.filter((eve) => {
-      if (eve?.data?.name?.toLowerCase()?.includes(txt.toLowerCase())) {
-        f = 1;
-        setFilteredItem([eve]);
-      }
-    })
-    if (f === 0)
-      setFilteredItem([]);
-  }
+     console.log("clicked");
+     item.filter((eve) => {
+       if (eve?.data?.name?.toLowerCase()?.includes(txt.toLowerCase())) {
+         f = 1;
+         setFilteredItem([eve]);
+       }
+     })
+     if (f === 0)
+       setFilteredItem([]);
+   
+   }
   useEffect(()=>{
     getResCard();
   },[])
